@@ -36,6 +36,6 @@ alasan menggunakan PostgreSQL
 - PostgreSQL dapat menggunakan Indexing sehingga dapat memgoptimalkan query.
 
 ## Fitur penting database
-menggunakan indexing pada kolom id_tiket,id_kursi dan NIK.
-menggunakan ACID transaction pada pembuatan transaksi baru.
-menggunakan fitur JOIN pada banyak table.
+- menggunakan indexing pada kolom id_tiket,id_kursi dan NIK.
+- menggunakan ACID transaction pada pembuatan transaksi baru.
+- menggunakan fitur JOIN pada banyak table.
