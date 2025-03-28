@@ -1,18 +1,9 @@
 const customerModel = require('../models/customer');
 const customerValidateBody = require('../utils/customerValidateBody');
 const createCustomer = async (req, res) => {
-  try {
-    const newCustomer = await customerModel.createCustomer(req.body);
-    res.status(201).json(newCustomer);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const getCustomer = async (req, res) => {
   const validationBody = customerValidateBody(req.body)
 
-  if (!validationBody){
+  if (validationBody){
       return res.status(400).json({
           message: 'Bad Request. Validation failed',
           status: 400,
@@ -20,10 +11,22 @@ const getCustomer = async (req, res) => {
       });
   }
   try {
+    const newCustomer = await customerModel.createCustomer(req.body);
+    console.log(newCustomer)
+    res.status(201).json(newCustomer);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getCustomer = async (req, res) => {
+  
+  try {
     const customer = await customerModel.getCustomerByNIK(req.params.nik);
     if (!customer) {
       return res.status(404).json({ message: 'Customer not found' });
     }
+    
     res.status(200).json({ 
       message: 'Getting data Success!',
       data: customer,
@@ -40,13 +43,16 @@ const deleteCustomer = async (req, res) => {
     if (deletedCustomer.rowCount === 0) {
       return res.status(404).json({ message: 'Customer not found' });
     }
-    res.status(204).json({ 
+    res.status(200).json({ 
       message: `Delete customer ${req.params.nik} success`,
-      rowCount: datas.rowCount,
-      status: 204
+      rowCount: deletedCustomer.rowCount,
+      status: 200
   });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message,
+      status: 500,
+      error_message: "tes"
+     });
   }
 }
 

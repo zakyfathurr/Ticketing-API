@@ -2,10 +2,13 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const middlewareLogRequest = require('./middleware/log')
+const { connectRedis } = require('./config/redis');
 // Middleware
 app.use(express.json());
 app.use(middlewareLogRequest)
+connectRedis();
 // Routes
+
 app.use('/api/customers', require('./routes/customerRoutes'));
 app.use('/api/transactions', require('./routes/transactionRoutes'));
 app.get('/', (req, res) => {

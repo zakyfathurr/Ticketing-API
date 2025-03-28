@@ -39,7 +39,7 @@ const updateTransaction = async (req, res) => {
   try {
     const updated = await transactionModel.updateTransactionStatus(
       req.params.id,
-      req.body.status
+      req.body.status_transaksi
     );
     
     res.json(updated);
@@ -48,8 +48,21 @@ const updateTransaction = async (req, res) => {
   }
 };
 
+const deleteTransaction = async (req, res) => {
+  try {
+    const deleted = await transactionModel.deleteTransaction(req.params.id);
+    res.status(200).json({ 
+      message: "Transaksi dihapus",
+      data : deleted });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   createTransaction,
   getTransaction,
-  updateTransaction
+  updateTransaction,
+  deleteTransaction
 };

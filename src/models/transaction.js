@@ -76,9 +76,37 @@ const getTransactionTickets = async (transactionId) => {
   return result.rows;
 };
 
+const deleteTransaction = async (transactionId) => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query(
+      `UPDATE Tiket 
+       SET id_transaksi = NULL, status = 'belum terjual'
+       WHERE id_transaksi = $1`,
+      [transactionId]
+    );
+
+    const result = await client.query(
+      'DELETE FROM Transaksi WHERE id_transaksi = $1',
+      [transactionId]
+    );
+
+    await client.query('COMMIT');
+    return result.rowCount;
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
 module.exports = {
   createTransaction,
   getTransactionById,
   updateTransactionStatus,
-  getTransactionTickets
+  getTransactionTickets,
+  deleteTransaction,
+
 };
